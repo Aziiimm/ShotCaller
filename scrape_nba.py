@@ -18,7 +18,7 @@ def scrape_player_stats():
     table = soup.find('table', {'id': 'per_game_stats'})
 
     # extract headers
-    headers = [th.getText() for th in table.find_all('tr')[0].find_all('th')][1:]  # skip the rank column
+    headers = [th.getText() for th in table.find_all('tr')[0].find_all('th')][1:]  # skip the 'rank' column
 
     # extract rows
     rows = table.find_all('tr')[1:]
