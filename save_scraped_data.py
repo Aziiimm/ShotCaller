@@ -17,12 +17,12 @@ def save_to_postgres(df):
     cur = conn.cursor()
 
     for i, row in df.iterrows():
-        print(f"Inserting row: {row}")  # Print row data
-        print(f"Row type: {type(row)}")  # Print the row type
+        print(f"Inserting row: {row}")
+        print(f"Row type: {type(row)}")  
 
-        # Ensure we're extracting only the values from the row
+        # extracting only the values from the row
         row_values = tuple(row.values)
-        print(f"Row values: {row_values}")  # Print the tuple of row values
+        print(f"Row values: {row_values}") 
 
         cur.execute("""
             INSERT INTO player_stats (player, team, position, games_played, minutes_per_game, 

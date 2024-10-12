@@ -14,37 +14,37 @@ def scrape_player_stats():
     url = 'https://www.basketball-reference.com/leagues/NBA_2024_per_game.html'
     response = requests.get(url)
 
-    # Ensure the encoding is set to UTF-8
+    # set encoding to UTF-8
     response.encoding = 'utf-8'
 
-    # Check if request is successful
+    # check for sucessful request 
     if response.status_code != 200:
         print(f"Error fetching page: {response.status_code}")
         return None
 
-    # Parse the HTML content
+    # parse html content
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Find the table
+    # find the table
     table = soup.find('table', {'id': 'per_game_stats'})
 
-    # Extract headers
+    # extract headers
     headers = [th.getText() for th in table.find_all('tr')[0].find_all('th')][1:]  # skip the 'rank' column
 
-    # Extract rows
+    # extract rows
     rows = table.find_all('tr')[1:]
     player_stats = [[td.getText() for td in row.find_all('td')] for row in rows if row.find('td')]
 
-    # Convert to dataframe
+    # convert to dataframe
     df = pd.DataFrame(player_stats, columns=headers)
 
-    # Disregard 'League Average' row
+    # disregard 'League Average' row
     df = df[df['Player'] != 'League Average']
 
     # print("Original player names:")
     # print(df['Player'].head(10))  # Print the first 10 players
 
-    # Normalize player names by removing accents
+    # remove accent marks
     df['Player'] = df['Player'].apply(remove_accents)
 
     # print("Updated player names:")
@@ -56,7 +56,6 @@ def scrape_player_stats():
     numeric_columns = ['G', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
     df[numeric_columns] = df[numeric_columns].apply(pd.to_numeric, errors='coerce')
 
-    # Save to CSV
     df.to_csv('nba_player_stats_2024.csv', index=False, encoding='utf-8')
     print("Player stats saved to nba_player_stats_2024.csv")
 
