@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 import psycopg2
-from scrape_nba import scrape_player_stats
+from scrape_player_stats import scrape_player_stats
 
 load_dotenv()
 
@@ -15,6 +15,8 @@ def save_to_postgres(df):
 
     conn.set_client_encoding('UTF-8')
     cur = conn.cursor()
+
+    df.fillna(0, inplace=True)
 
     for i, row in df.iterrows():
         print(f"Inserting row: {row}")

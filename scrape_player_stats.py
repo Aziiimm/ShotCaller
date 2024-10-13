@@ -3,6 +3,39 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import unicodedata
 
+team_name_mapping = {
+    "ATL": "Atlanta Hawks",
+    "BOS": "Boston Celtics",
+    "BRK": "Brooklyn Nets",
+    "CHA": "Charlotte Hornets",
+    "CHI": "Chicago Bulls",
+    "CLE": "Cleveland Cavaliers",
+    "DAL": "Dallas Mavericks",
+    "DEN": "Denver Nuggets",
+    "DET": "Detroit Pistons",
+    "GSW": "Golden State Warriors",
+    "HOU": "Houston Rockets",
+    "IND": "Indiana Pacers",
+    "LAC": "Los Angeles Clippers",
+    "LAL": "Los Angeles Lakers",
+    "MEM": "Memphis Grizzlies",
+    "MIA": "Miami Heat",
+    "MIL": "Milwaukee Bucks",
+    "MIN": "Minnesota Timberwolves",
+    "NOP": "New Orleans Pelicans",
+    "NYK": "New York Knicks",
+    "OKC": "Oklahoma City Thunder",
+    "ORL": "Orlando Magic",
+    "PHI": "Philadelphia 76ers",
+    "PHO": "Phoenix Suns",
+    "POR": "Portland Trail Blazers",
+    "SAC": "Sacramento Kings",
+    "SAS": "San Antonio Spurs",
+    "TOR": "Toronto Raptors",
+    "UTA": "Utah Jazz",
+    "WAS": "Washington Wizards"
+}
+
 def remove_accents(input_str):
     """
     This function removes accents from a given string using Unicode normalization.
@@ -13,42 +46,29 @@ def remove_accents(input_str):
 def scrape_player_stats():
     url = 'https://www.basketball-reference.com/leagues/NBA_2024_per_game.html'
     response = requests.get(url)
-
-    # set encoding to UTF-8
     response.encoding = 'utf-8'
 
-    # check for sucessful request 
     if response.status_code != 200:
         print(f"Error fetching page: {response.status_code}")
         return None
 
-    # parse html content
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # find the table
     table = soup.find('table', {'id': 'per_game_stats'})
 
-    # extract headers
     headers = [th.getText() for th in table.find_all('tr')[0].find_all('th')][1:]  # skip the 'rank' column
 
-    # extract rows
     rows = table.find_all('tr')[1:]
     player_stats = [[td.getText() for td in row.find_all('td')] for row in rows if row.find('td')]
 
-    # convert to dataframe
     df = pd.DataFrame(player_stats, columns=headers)
 
     # disregard 'League Average' row
     df = df[df['Player'] != 'League Average']
 
-    # print("Original player names:")
-    # print(df['Player'].head(10))  # Print the first 10 players
-
-    # remove accent marks
     df['Player'] = df['Player'].apply(remove_accents)
 
-    # print("Updated player names:")
-    # print(df['Player'].head(10))  # Print the first 10 players
+    df['Team'] = df['Team'].map(team_name_mapping)
 
     relevant_columns = ['Player', 'Team', 'Pos', 'G', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
     df = df[relevant_columns]
