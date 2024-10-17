@@ -1,7 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from load_data import merged_df  # Import the cleaned player stats
+from src.load_data import merged_df  # Import the cleaned player stats
 
 print(merged_df.head(10))
 
