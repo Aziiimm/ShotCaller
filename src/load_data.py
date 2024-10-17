@@ -40,6 +40,9 @@ for i in range(len(team_df) - 1):
         
         # Create matchup features: Team A vs Team B
         matchup = {
+            'team_A': team_A['team'],  # Add Team A's name
+            'team_B': team_B['team'],  # Add Team B's name
+            
             'team_A_win_percentage': team_A['win_percentage'],
             'team_A_points_per_game': team_A['points_per_game'],
             'team_A_assists_per_game': team_A['assists_per_game'],
@@ -61,8 +64,7 @@ for i in range(len(team_df) - 1):
 matchup_df = pd.DataFrame(matchups)
 
 # Save to CSV
-matchup_df.to_csv('team_matchups.csv', index=False)
+matchup_df.to_csv('./data/team_matchups.csv', index=False)
 
 if __name__ == "__main__":
     print(matchup_df.head())
-
