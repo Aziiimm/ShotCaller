@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import joblib
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app)
+
 model = joblib.load('./models/random_forest_matchup_model.pkl')
 
 matchup_df = pd.read_csv('./data/team_matchups.csv')
@@ -16,11 +19,15 @@ def predict():
     team_A = data['team_A']
     team_B = data['team_B']
 
-    # Extract relevant features for the selected teams
-    team_A_data = matchup_df[matchup_df['team_A'] == team_A].iloc[0]
-    team_B_data = matchup_df[matchup_df['team_B'] == team_B].iloc[0]
+    team_A_data = matchup_df[matchup_df['team_A'] == team_A]
+    team_B_data = matchup_df[matchup_df['team_B'] == team_B]
 
-    # Prepare the input for the model
+    if team_A_data.empty or team_B_data.empty:
+        return jsonify({'error': 'One or both teams not found'}), 400
+
+    team_A_data = team_A_data.iloc[0]
+    team_B_data = team_B_data.iloc[0]
+
     input_data = pd.DataFrame({
         'team_A_win_percentage': [team_A_data['team_A_win_percentage']],
         'team_A_points_per_game': [team_A_data['team_A_points_per_game']],

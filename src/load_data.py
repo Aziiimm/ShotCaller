@@ -58,7 +58,32 @@ for i in range(len(team_df) - 1):
             # Target: 1 if Team A won, 0 if Team B won (for now, random or historical data)
             'match_outcome': 1 if team_A['wins'] > team_B['wins'] else 0
         }
+        
+        # Add the matchup and the reverse matchup (Team B vs Team A)
         matchups.append(matchup)
+
+        # Create reverse matchup: Team B vs Team A
+        reverse_matchup = {
+            'team_A': team_B['team'],  # Reverse Team A and Team B
+            'team_B': team_A['team'],  # Reverse Team A and Team B
+            
+            'team_A_win_percentage': team_B['win_percentage'],
+            'team_A_points_per_game': team_B['points_per_game'],
+            'team_A_assists_per_game': team_B['assists_per_game'],
+            'team_A_rebounds_per_game': team_B['rebounds_per_game'],
+            'team_A_top_player_points': player_df[player_df['team'] == team_B['team']]['points_per_game'].max(),
+
+            'team_B_win_percentage': team_A['win_percentage'],
+            'team_B_points_per_game': team_A['points_per_game'],
+            'team_B_assists_per_game': team_A['assists_per_game'],
+            'team_B_rebounds_per_game': team_A['rebounds_per_game'],
+            'team_B_top_player_points': player_df[player_df['team'] == team_A['team']]['points_per_game'].max(),
+            
+            # Target: 1 if Team A won, 0 if Team B won (for now, random or historical data)
+            'match_outcome': 1 if team_A['wins'] < team_B['wins'] else 0
+        }
+        
+        matchups.append(reverse_matchup)
 
 # Convert matchups into DataFrame
 matchup_df = pd.DataFrame(matchups)
