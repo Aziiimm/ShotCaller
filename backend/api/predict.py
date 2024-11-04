@@ -1,17 +1,15 @@
-from flask import Flask, request, jsonify
+from flask import Blueprint, request, jsonify
 from flask_cors import CORS
 import joblib
 import pandas as pd
 
-# Initialize the Flask application
-app = Flask(__name__)
-CORS(app)
+predict_app = Blueprint('predict', __name__)
+CORS(predict_app)
 
-# Load model and data once when the server starts
 model = joblib.load('./models/random_forest_matchup_model.pkl')
 matchup_df = pd.read_csv('./data/team_matchups.csv')
 
-@app.route('/api/predict', methods=['POST'])
+@predict_app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
     team_A = data['team_A']

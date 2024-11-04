@@ -6,7 +6,7 @@ const api = axios.create({
 
 export const predictMatchup = async (teamA: string, teamB: string) => {
   try {
-    const response = await api.post("/predict", {
+    const response = await api.post("/api/predict", {
       team_A: teamA,
       team_B: teamB,
     });
