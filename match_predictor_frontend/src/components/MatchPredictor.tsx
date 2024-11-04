@@ -1,55 +1,76 @@
 import React, { useState } from "react";
-import { predictMatchup } from "../api/matchupService"; // Import the existing API service
+import { predictMatchup } from "../api/matchupService";
+import { ComboboxDemo } from "./ui/teamsCombobox";
+import { ToastProvider, Toast } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 
 const MatchPredictor: React.FC = () => {
   const [teamA, setTeamA] = useState("");
   const [teamB, setTeamB] = useState("");
   const [prediction, setPrediction] = useState("");
 
+  const { toast } = useToast();
+
   const handlePredict = async () => {
     if (teamA && teamB) {
-      const result = await predictMatchup(teamA, teamB);
-      setPrediction(result || "Error predicting the outcome");
+      if (teamA === teamB) {
+        toast({
+          title: "Selection Error",
+          description: "Please Select Two Different Teams",
+          duration: 2000,
+        });
+      } else {
+        try {
+          const result = await predictMatchup(teamA, teamB);
+          setPrediction(result || "Error predicting the outcome");
+        } catch (error) {
+          toast({
+            title: "Prediction Error",
+            description: "An Error Occured. Please Try Again Later.",
+            duration: 2000,
+          });
+        }
+      }
     } else {
-      alert("Please select both teams");
+      toast({
+        title: "Selection Error",
+        description: "Please Select Both Teams",
+        duration: 2000,
+      });
     }
   };
 
   return (
-    <div className="bg-white shadow-md rounded-md p-6 max-w-lg mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Predict NBA Match Outcome</h2>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Team A:
-        </label>
-        <input
-          type="text"
-          value={teamA}
-          onChange={(e) => setTeamA(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-        />
+    <ToastProvider>
+      <div className="bg-transparent border-2 dark:border-gray-900 rounded-3xl p-6 max-w-2xl h-86 mx-auto">
+        <h2 className="text-xl font-semibold mb-4 justify-self-center">
+          Predict NBA Match Outcome
+        </h2>
+        <div className="mb-4">
+          <label className="block text-m font-medium text-black dark:text-white">
+            Team A:
+          </label>
+          <ComboboxDemo onSelect={setTeamA} />
+        </div>
+        <div className="mb-4">
+          <label className="block text-m font-medium text-black dark:text-white">
+            Team B:
+          </label>
+
+          <ComboboxDemo onSelect={setTeamB} />
+        </div>
+        <button
+          onClick={handlePredict}
+          className="bg-blue-700 transition ease-in-out duration-300 text-white px-4 py-2 rounded-md hover:bg-blue-900 dark:bg-red-500 dark:hover:bg-red-800"
+        >
+          Predict
+        </button>
+        {prediction && (
+          <h3 className="mt-4 text-xl font-bold underline">{`Prediction: ${prediction}`}</h3>
+        )}
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Team B:
-        </label>
-        <input
-          type="text"
-          value={teamB}
-          onChange={(e) => setTeamB(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-        />
-      </div>
-      <button
-        onClick={handlePredict}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-      >
-        Predict
-      </button>
-      {prediction && (
-        <h3 className="mt-4 text-lg">{`Prediction: ${prediction}`}</h3>
-      )}
-    </div>
+      <Toast />
+    </ToastProvider>
   );
 };
 

@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 import psycopg2
-from src.scrape_player_stats import scrape_player_stats
+from scrape_player_stats import scrape_player_stats
 
 load_dotenv()
 

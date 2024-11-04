@@ -1,45 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MatchPredictor from "./components/MatchPredictor";
 import FantasyPredictor from "./components/FantasyPredictor";
+import Navbar from "./components/navbar";
+import { Toaster } from "./components/ui/toaster";
 
 const App: React.FC = () => {
   const [activePredictor, setActivePredictor] = useState<"nba" | "fantasy">(
     "nba"
   );
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
 
   const handleSwitch = (predictor: "nba" | "fantasy") => {
     setActivePredictor(predictor);
   };
 
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
+
   return (
-    <div className="min-h-screen bg-gray-500 p-4">
-      <h1 className="text-3xl font-bold text-center mb-6">
-        NBA & Fantasy Predictor
-      </h1>
+    <div className="h-screen w-screen bg-slate-100 dark:bg-gray-950">
+      <Navbar
+        onSwitch={handleSwitch}
+        activePredictor={activePredictor}
+        toggleTheme={toggleTheme}
+        isDarkMode={isDarkMode}
+      />
 
-      <div className="flex justify-center space-x-4 mb-6">
-        <button
-          className={`px-4 py-2 rounded-md ${
-            activePredictor === "nba" ? "bg-blue-500 text-white" : "bg-gray-300"
-          }`}
-          onClick={() => handleSwitch("nba")}
-        >
-          NBA Match Predictor
-        </button>
-        <button
-          className={`px-4 py-2 rounded-md ${
-            activePredictor === "fantasy"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-300"
-          }`}
-          onClick={() => handleSwitch("fantasy")}
-        >
-          Fantasy League Predictor
-        </button>
-      </div>
-
+      <div className="flex justify-center mt-32 space-x-4 mb-6"></div>
       {activePredictor === "nba" && <MatchPredictor />}
       {activePredictor === "fantasy" && <FantasyPredictor />}
+      <Toaster />
     </div>
   );
 };

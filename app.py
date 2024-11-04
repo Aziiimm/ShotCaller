@@ -45,7 +45,7 @@ def predict():
     prediction = model.predict(input_data)
 
     # Return prediction as a response
-    result = 'Team A Wins' if prediction[0] == 1 else 'Team B Wins'
+    result = f"{team_A} Wins" if prediction[0] == 1 else f"{team_B} Wins"
     return jsonify({'prediction': result})
 
 if __name__ == "__main__":

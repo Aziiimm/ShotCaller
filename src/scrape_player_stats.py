@@ -7,7 +7,7 @@ team_name_mapping = {
     "ATL": "Atlanta Hawks",
     "BOS": "Boston Celtics",
     "BRK": "Brooklyn Nets",
-    "CHA": "Charlotte Hornets",
+    "CHO": "Charlotte Hornets",
     "CHI": "Chicago Bulls",
     "CLE": "Cleveland Cavaliers",
     "DAL": "Dallas Mavericks",
@@ -75,8 +75,10 @@ def scrape_player_stats():
 
     numeric_columns = ['G', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
     df[numeric_columns] = df[numeric_columns].apply(pd.to_numeric, errors='coerce')
+    df = df.dropna(subset='Team')
 
-    df.to_csv('nba_player_stats_2024.csv', index=False, encoding='utf-8')
+
+    df.to_csv('../data/nba_player_stats_2024.csv', index=False, encoding='utf-8')
     print("Player stats saved to nba_player_stats_2024.csv")
 
     return df

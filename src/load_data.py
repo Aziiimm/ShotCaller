@@ -89,7 +89,7 @@ for i in range(len(team_df) - 1):
 matchup_df = pd.DataFrame(matchups)
 
 # Save to CSV
-matchup_df.to_csv('./data/team_matchups.csv', index=False)
+matchup_df.to_csv('../data/team_matchups.csv', index=False)
 
 if __name__ == "__main__":
     print(matchup_df.head())
