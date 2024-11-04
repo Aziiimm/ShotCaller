@@ -5,7 +5,7 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/ShotCaller/", // Make sure this is appropriate for your deployment
+  base: "/frontend/", // Make sure this is appropriate for your deployment
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
