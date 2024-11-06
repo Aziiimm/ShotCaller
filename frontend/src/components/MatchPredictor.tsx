@@ -47,13 +47,13 @@ const MatchPredictor: React.FC = () => {
           Predict NBA Match Outcome
         </h2>
         <div className="mb-4">
-          <label className="block text-m font-medium text-black dark:text-white">
+          <label className="block text-m underline font-medium text-black mb-2 dark:text-white">
             Team A:
           </label>
           <ComboboxDemo onSelect={setTeamA} />
         </div>
         <div className="mb-4">
-          <label className="block text-m font-medium text-black dark:text-white">
+          <label className="block text-m underline font-medium text-black mb-2 dark:text-white">
             Team B:
           </label>
 
