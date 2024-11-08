@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.png";
 
 interface NavbarProps {
@@ -14,6 +14,12 @@ const Navbar: React.FC<NavbarProps> = ({
   toggleTheme,
   isDarkMode,
 }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
   return (
     <nav className="bg-white pt-4 bg-slate-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -24,11 +30,11 @@ const Navbar: React.FC<NavbarProps> = ({
           </span>
         </a>
         <button
-          data-collapse-toggle="navbar-default"
           type="button"
           className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           aria-controls="navbar-default"
-          aria-expanded="false"
+          aria-expanded={isMenuOpen}
+          onClick={handleMenuToggle}
         >
           <span className="sr-only">Open main menu</span>
           <svg
@@ -47,15 +53,20 @@ const Navbar: React.FC<NavbarProps> = ({
             />
           </svg>
         </button>
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col mt-4 gap-8 md:flex-row md:mt-0">
+        <div
+          className={`${
+            isMenuOpen ? "block" : "hidden"
+          } w-full md:block md:w-auto`}
+          id="navbar-default"
+        >
+          <ul className="font-medium flex flex-col mt-4 gap-x-8 gap-y-4 md:flex-row md:mt-0">
             <li>
               <button
                 onClick={() => onSwitch("nba")}
                 className={`block p-2 rounded transition ease-in-out duration-300 rounded-lg ${
                   activePredictor === "nba"
-                    ? "text-white -translate-y-2 bg-blue-700 dark:bg-red-500"
-                    : "text-black hover:-translate-y-2 hover:bg-slate-200 dark:text-white dark:hover:bg-slate-600"
+                    ? "text-white md:-translate-y-2 bg-blue-700 dark:bg-red-500"
+                    : "text-black md:hover:-translate-y-2 hover:bg-slate-200 dark:text-white dark:hover:bg-slate-600"
                 }`}
               >
                 NBA Match Predictor
@@ -66,8 +77,8 @@ const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onSwitch("fantasy")}
                 className={`block p-2 rounded transition ease-in-out duration-300 rounded-lg ${
                   activePredictor === "fantasy"
-                    ? "text-white -translate-y-2 bg-blue-700 dark:bg-red-500"
-                    : "text-black hover:-translate-y-2 hover:bg-slate-200 dark:text-white dark:hover:bg-slate-600"
+                    ? "text-white md:-translate-y-2 bg-blue-700 dark:bg-red-500"
+                    : "text-black md:hover:-translate-y-2 hover:bg-slate-200 dark:text-white dark:hover:bg-slate-600"
                 }`}
               >
                 Fantasy League Predictor
@@ -76,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <li>
               <button
                 onClick={toggleTheme}
-                className="text-black transition ease-in-out hover:-translate-y-2 p-2 duration-300 hover:bg-slate-300 rounded-lg dark:text-white dark:hover:bg-slate-600"
+                className="text-black transition ease-in-out md:hover:-translate-y-2 p-2 duration-300 hover:bg-slate-300 rounded-lg dark:text-white dark:hover:bg-slate-600"
               >
                 {isDarkMode ? "Mode 🌙" : "Mode 🌞"}
               </button>
