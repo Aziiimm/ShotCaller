@@ -6,7 +6,7 @@ const api = axios.create({
 
 export const predictMatchup = async (teamA: string, teamB: string) => {
   try {
-    const response = await api.post("/api/predict", {
+    const response = await api.post("/api/predict-nba", {
       team_A: teamA,
       team_B: teamB,
     });
@@ -31,7 +31,7 @@ export const predictFantasyMatchup = async (
       team_B_players: teamBPlayers,
     });
     console.log("Backend response:", response.data);
-    return response.data; // Return the full response, not just prediction
+    return response.data;
   } catch (error) {
     console.error("Error predicting fantasy matchup:", error);
     return null;
