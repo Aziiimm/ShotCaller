@@ -4,11 +4,13 @@ import { ComboboxDemo } from "./ui/playersComboBox";
 interface SelectPlayerProps {
   onPlayerCountChange: (team: string, count: number) => void;
   onLimitReached: (team: string) => void;
+  onPlayerSelection: (team: string, players: string[]) => void; // New prop for selected players
 }
 
 const SelectPlayer: React.FC<SelectPlayerProps> = ({
   onPlayerCountChange,
   onLimitReached,
+  onPlayerSelection, // Pass selected players to parent
 }) => {
   const [teamAPlayers, setTeamAPlayers] = useState<string[]>([]);
   const [teamBPlayers, setTeamBPlayers] = useState<string[]>([]);
@@ -18,10 +20,12 @@ const SelectPlayer: React.FC<SelectPlayerProps> = ({
       if (prevPlayers.includes(player)) {
         const updatedPlayers = prevPlayers.filter((p) => p !== player);
         onPlayerCountChange("A", updatedPlayers.length);
+        onPlayerSelection("A", updatedPlayers); // Notify parent component
         return updatedPlayers;
       } else if (prevPlayers.length < 13) {
         const updatedPlayers = [...prevPlayers, player];
         onPlayerCountChange("A", updatedPlayers.length);
+        onPlayerSelection("A", updatedPlayers); // Notify parent component
         return updatedPlayers;
       } else {
         onLimitReached("A");
@@ -35,10 +39,12 @@ const SelectPlayer: React.FC<SelectPlayerProps> = ({
       if (prevPlayers.includes(player)) {
         const updatedPlayers = prevPlayers.filter((p) => p !== player);
         onPlayerCountChange("B", updatedPlayers.length);
+        onPlayerSelection("B", updatedPlayers); // Notify parent component
         return updatedPlayers;
       } else if (prevPlayers.length < 13) {
         const updatedPlayers = [...prevPlayers, player];
         onPlayerCountChange("B", updatedPlayers.length);
+        onPlayerSelection("B", updatedPlayers); // Notify parent component
         return updatedPlayers;
       } else {
         onLimitReached("B");
@@ -51,6 +57,7 @@ const SelectPlayer: React.FC<SelectPlayerProps> = ({
     setTeamAPlayers((prevPlayers) => {
       const updatedPlayers = prevPlayers.filter((p) => p !== player);
       onPlayerCountChange("A", updatedPlayers.length);
+      onPlayerSelection("A", updatedPlayers); // Notify parent component
       return updatedPlayers;
     });
   };
@@ -59,9 +66,11 @@ const SelectPlayer: React.FC<SelectPlayerProps> = ({
     setTeamBPlayers((prevPlayers) => {
       const updatedPlayers = prevPlayers.filter((p) => p !== player);
       onPlayerCountChange("B", updatedPlayers.length);
+      onPlayerSelection("B", updatedPlayers); // Notify parent component
       return updatedPlayers;
     });
   };
+
   return (
     <div>
       <div className="mb-16">
@@ -89,7 +98,7 @@ const SelectPlayer: React.FC<SelectPlayerProps> = ({
         />
       </div>
 
-      <div className="mb-16">
+      <div className="mb-8">
         <p className="text-m font-medium text-black flex flex-col dark:text-white">
           <label className="mb-1">Selected Players for Team B:</label>
           <span>

@@ -27,7 +27,7 @@ const App: React.FC = () => {
   }, [isDarkMode]);
 
   return (
-    <div className="h-screen w-screen bg-slate-100 dark:bg-gray-950">
+    <div className="h-screen max-h-none w-screen bg-slate-100 dark:bg-gray-950">
       <Navbar
         onSwitch={handleSwitch}
         activePredictor={activePredictor}

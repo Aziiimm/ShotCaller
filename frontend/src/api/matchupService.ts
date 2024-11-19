@@ -16,3 +16,24 @@ export const predictMatchup = async (teamA: string, teamB: string) => {
     return null;
   }
 };
+
+export const predictFantasyMatchup = async (
+  teamAPlayers: string[],
+  teamBPlayers: string[]
+) => {
+  console.log("Sending to backend:", {
+    team_A_players: teamAPlayers,
+    team_B_players: teamBPlayers,
+  });
+  try {
+    const response = await api.post("/api/predict-fantasy", {
+      team_A_players: teamAPlayers,
+      team_B_players: teamBPlayers,
+    });
+    console.log("Backend response:", response.data);
+    return response.data; // Return the full response, not just prediction
+  } catch (error) {
+    console.error("Error predicting fantasy matchup:", error);
+    return null;
+  }
+};
